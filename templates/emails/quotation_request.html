@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .info-row {
+            margin-bottom: 10px;
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 style="color: #2563eb; margin: 0;">New Quotation Request</h2>
+            <p style="color: #666; margin-top: 5px;">A new quotation request has been submitted</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-row">
+                <span class="label">Customer Name:</span>
+                <span>{{customerName}}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Business Name:</span>
+                <span>{{businessName}}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Product:</span>
+                <span>{{productTitle}}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Quantity:</span>
+                <span>{{quantity}} units</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Specifications:</span>
+                <p style="margin: 5px 0;">{{specifications}}</p>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <div class="info-row">
+                <span class="label">Contact Information:</span>
+                <div style="margin-left: 10px;">
+                    <p style="margin: 5px 0;">📞 {{customerPhone}}</p>
+                    <p style="margin: 5px 0;">📧 {{customerEmail}}</p>
+                </div>
+            </div>
+            
+            <div class="info-row" style="margin-top: 20px; font-size: 0.9em; color: #666;">
+                Request received on: {{timestamp}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

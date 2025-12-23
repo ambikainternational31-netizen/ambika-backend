@@ -1,0 +1,51 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Create env file
+      run: |
+        echo "NODE_ENV=production" > .env
+        echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+        echo "CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}" >> .env
+        echo "CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}" >> .env
+        echo "CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}" >> .env
+        echo "EMAIL_SERVICE=${{ secrets.EMAIL_SERVICE }}" >> .env
+        echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env
+        echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> .env
+        echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> .env
+
+    - name: Deploy to Render
+      if: github.ref == 'refs/heads/main'
+      env:
+        RENDER_TOKEN: ${{ secrets.RENDER_API_KEY }}
+      run: |
+        curl -X POST https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+          -H "Authorization: Bearer $RENDER_TOKEN"
+    
+    - name: Health Check
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "Waiting for deployment to complete..."
+        sleep 60  # Give Render some time to deploy
+        curl -f https://ambika-api.onrender.com/api/health || exit 1
