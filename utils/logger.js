@@ -6,7 +6,7 @@ const fs = require('fs');
 const logDir = path.join(__dirname, '../logs');
 try {
   if (!fs.existsSync(logDir)) {
-    // fs.mkdirSync(logDir, { recursive: true });
+    fs.mkdirSync(logDir, { recursive: true });
   }
 } catch (error) {
   console.error('Failed to create logs directory:', error);
@@ -19,19 +19,19 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'ambika-api' },
   transports: [
     // Production: Only log errors to file
-    // new winston.transports.File({
-    //   filename: path.join(logDir, 'error.log'),
-    //   level: 'error',
-    //   maxsize: 1048576, // 1MB
-    //   maxFiles: 1,
-    //   tailable: true,
-    //   format: winston.format.combine(
-    //     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-    //     winston.format.printf(({ level, message, timestamp }) => 
-    //       `${timestamp} [${level}]: ${message}`
-    //     )
-    //   )
-    // })
+    new winston.transports.File({
+      filename: path.join(logDir, 'error.log'),
+      level: 'error',
+      maxsize: 1048576, // 1MB
+      maxFiles: 1,
+      tailable: true,
+      format: winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.printf(({ level, message, timestamp }) => 
+          `${timestamp} [${level}]: ${message}`
+        )
+      )
+    })
   ]
 });
 
